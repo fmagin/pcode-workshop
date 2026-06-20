@@ -1,0 +1,31 @@
+//----------------------START "DO NOT MODIFY" SECTION------------------------------
+def ghidraInstallDir
+
+if (System.env.GHIDRA_INSTALL_DIR) {
+	ghidraInstallDir = System.env.GHIDRA_INSTALL_DIR
+}
+else if (project.hasProperty("GHIDRA_INSTALL_DIR")) {
+	ghidraInstallDir = project.getProperty("GHIDRA_INSTALL_DIR")
+}
+
+if (ghidraInstallDir) {
+	apply from: new File(ghidraInstallDir).getCanonicalPath() + "/support/buildExtension.gradle"
+}
+else {
+	throw new GradleException("GHIDRA_INSTALL_DIR is not defined!")
+}
+//----------------------END "DO NOT MODIFY" SECTION-------------------------------
+
+
+// Add the ghidra_scripts directory as an additional source set, so IntelliJ IDEA treats the scripts there as part of
+// the module
+// this means that your plugin code is available for code completion and analysis and that all dependencies of the module
+// are inherited
+sourceSets {
+	main {
+		java {
+			srcDirs 'ghidra_scripts'
+			srcDirs 'scripts'
+		}
+	}
+}
